@@ -16,6 +16,7 @@ public class Query {
     private List<Field> groupBies = new ArrayList<Field>();
     private List<Order> orders = new ArrayList<Order>();
     private List<Criterion> havings = new ArrayList<Criterion>();
+	private Limit limit = null;
 
     private Query(Field... fields) {
         this.fields.addAll(asList(fields));
@@ -55,6 +56,17 @@ public class Query {
         return this;
     }
 
+	/**
+	 * Adds the limit command to the SQL query.
+	 *
+	 * @param limit {@link Limit} - The {@link Limit} command to use.
+	 * @return {@link Query} - The modified {@link Query}.
+	 */
+	public Query limit(Limit limit) {
+		this.limit = limit;
+		return this;
+	}
+
     @Override
     public boolean equals(Object o) {
         return this == o || !(o == null || getClass() != o.getClass()) && this.toString().equals(o.toString());
@@ -74,6 +86,7 @@ public class Query {
         visitWhereClause(sql);
         visitGroupByClause(sql);
         visitOrderByClause(sql);
+		visitLimitClause(sql);
         return sql.toString();
     }
 
@@ -141,6 +154,18 @@ public class Query {
         }
         sql.deleteCharAt(sql.length() - 1).append(SPACE);
     }
+
+	/**
+	 * Adds the limit clause to the SQL query.
+	 * @param sql {@link StringBuilder} - SQL to append.
+	 */
+	private void visitLimitClause(StringBuilder sql) {
+		if (limit == null) {
+			return;
+		}
+
+		sql.append(LIMIT).append(SPACE).append(limit).append(SPACE);
+	}
 
     public Table as(String alias) {
         return table(LEFT_PARENTHESIS + this.toString() + RIGHT_PARENTHESIS).as(alias);
