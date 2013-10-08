@@ -1,3 +1,0 @@
-<project name="SQL" basedir="." default="all">
-    <target name="all"></target>
-</project>
