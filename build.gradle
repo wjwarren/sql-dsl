@@ -1,0 +1,39 @@
+task wrapper(type: Wrapper) {
+	gradleVersion = "1.8"
+}
+
+apply plugin: "java"
+
+group = "nl.ansuz"
+version = "0.1"
+sourceCompatibility = 1.6
+
+jar {
+	manifest {
+		attributes "Implementation-Title": "SQL-DSL", "Implementation-Version": version
+	}
+}
+
+sourceSets {
+	main {
+		java {
+			srcDir "src"
+		}
+	}
+	
+	test {
+		java {
+			srcDir "test"
+		}
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// Test dependencies:
+	testCompile("junit:junit:4.11")
+	testCompile("org.hamcrest:hamcrest-all:1.3")
+}
